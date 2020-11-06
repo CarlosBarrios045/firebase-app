@@ -89,7 +89,7 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
             </Link>
           </Box>
 
-          {!matchesXs && <InputSearch />}
+          {!matchesXs && user && <InputSearch />}
 
           {!matchesSm && (
             <>

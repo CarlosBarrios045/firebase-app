@@ -1,5 +1,4 @@
 import { useFormik } from "formik"
-import Router from "next/router"
 
 // Layout
 import { Text, Input, Button, Link, Paper } from "src/components/Atoms"
@@ -64,7 +63,7 @@ const SignUpForm = () => {
   const classes = styles()
 
   // Validations
-  const { SignupSchema } = useValidations()
+  const { SignUpSchema } = useValidations()
   const { funcIsError, funcIsTextError } = useValidationsInput()
 
   // Func SignUp
@@ -80,14 +79,12 @@ const SignUpForm = () => {
   } = useFormik({
     initialValues: { name: "", dni: "", email: "", password: "" },
     onSubmit: async (values) => {
-      const { success, error } = await SignUpFirebase(values)
-      if (success) {
-        Router.push("/")
-      } else {
-        setErrors(error)
+      const { success, message } = await SignUpFirebase(values)
+      if (!success) {
+        setErrors(message)
       }
     },
-    validationSchema: SignupSchema,
+    validationSchema: SignUpSchema,
   })
 
   return (

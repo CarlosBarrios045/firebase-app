@@ -1,11 +1,14 @@
-// Redux
-import { connect } from "react-redux"
-
-// Actions
-import { signIn } from "src/store/modules/auth/actions"
+import { useFormik } from "formik"
 
 // Layout
 import { Text, Input, Button, Link, Paper } from "src/components/Atoms"
+
+// Auth
+import { useAuth } from "src/lib/auth"
+
+// Validations
+import useValidations from "src/hooks/useValidations"
+import useValidationsInput from "src/hooks/useValidationsInput"
 
 // Styles
 import { makeStyles } from "@material-ui/core/styles"
@@ -54,13 +57,35 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
   },
 }))
 
-const LoginForm = ({ signIn }) => {
+const LoginForm = () => {
   const classes = styles()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    signIn({ email: "juan", password: "1234" })
-  }
+  // Validations
+  const { SignInSchema } = useValidations()
+  const { funcIsError, funcIsTextError } = useValidationsInput()
+
+  // Func SignUp
+  const { signinWithEmail } = useAuth()
+
+  const {
+    handleSubmit,
+    errors,
+    values,
+    handleChange,
+    touched,
+    setErrors,
+  } = useFormik({
+    initialValues: { email: "", password: "" },
+    onSubmit: async (values) => {
+      const { success } = await signinWithEmail(values)
+      if (!success) {
+        setErrors({
+          password: "El correo electrónico o contraseña son incorrectos",
+        })
+      }
+    },
+    validationSchema: SignInSchema,
+  })
 
   return (
     <Paper className={classes.content}>
@@ -69,8 +94,23 @@ const LoginForm = ({ signIn }) => {
       </Text>
 
       <form onSubmit={handleSubmit} className={classes.form}>
-        <Input type="text" label="Correo electrónico" />
-        <Input type="password" label="Contraseña" />
+        <Input
+          name="email"
+          label="Correo electrónico"
+          value={values.email}
+          onChange={handleChange}
+          error={funcIsError(errors.email || errors.password, touched.email)}
+          helperText={funcIsTextError(errors.email, touched.email)}
+        />
+        <Input
+          name="password"
+          type="password"
+          label="Contraseña"
+          value={values.password}
+          onChange={handleChange}
+          error={funcIsError(errors.password, touched.password)}
+          helperText={funcIsTextError(errors.password, touched.password)}
+        />
         <Button
           type="submit"
           color="primary"
@@ -89,4 +129,4 @@ const LoginForm = ({ signIn }) => {
   )
 }
 
-export default connect(null, { signIn })(LoginForm)
+export default LoginForm

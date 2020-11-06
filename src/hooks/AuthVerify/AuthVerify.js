@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import filter from "lodash/filter"
 
 // Next
@@ -7,38 +7,58 @@ import { useRouter } from "next/router"
 // Auth
 import { useAuth } from "src/lib/auth"
 
+// Redux
+import { useDispatch } from "react-redux"
+
+// Actions
+import { closeSidebar } from "src/store/modules/layout/actions"
+
 import routes from "./routes"
 
 const AuthVerify = ({ children }) => {
-  // State
-  const [restricted, setRestricted] = useState(false)
-  const [ready, setReady] = useState(false)
-
   // Auth
-  const { user } = useAuth()
+  const { user, isLoading } = useAuth()
 
-  const { push, pathname } = useRouter()
-  const filterRoute = () => filter(routes, (r) => r.pathname === pathname)[0]
+  const { push, pathname, events } = useRouter()
+  const filterRoute = (url = pathname) =>
+    filter(routes, (r) => r.pathname === url)[0]
 
-  useEffect(() => {
-    const routeCurrent = filterRoute()
-    setRestricted(routeCurrent?.restricted || false)
-    setReady(true)
-  }, [pathname])
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log({ user })
-    if (ready) {
-      if (!user && restricted) {
+    if (!isLoading) {
+      // Check that a new route is OK
+      const routeCurrent = filterRoute()?.restricted
+
+      const handleRouteChange = (url) => {
+        // If change of route, close sidebar
+        dispatch(closeSidebar())
+
+        const newRouteCurrent = filterRoute(url)?.restricted
+        if (newRouteCurrent && !user) {
+          push("/iniciar-sesion")
+        } else if (user && !newRouteCurrent) {
+          push("/")
+        }
+      }
+
+      // Check that initial route is OK
+      if (routeCurrent && !user) {
         push("/iniciar-sesion")
-      } else if (user && !restricted) {
+      } else if (user && !routeCurrent) {
         push("/")
       }
-    }
-  }, [user, restricted, ready])
 
-  if (!user && restricted) return null
-  if (user && !restricted) return null
+      // Monitor routes
+      events.on("routeChangeStart", handleRouteChange)
+      return () => {
+        events.off("routeChangeStart", handleRouteChange)
+      }
+    }
+  }, [user, pathname, isLoading])
+
+  // Return Loader
+  if (isLoading) return null
   return <>{children}</>
 }
 

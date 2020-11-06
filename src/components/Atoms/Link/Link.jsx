@@ -12,6 +12,7 @@ const Link = ({
   className,
   disabled,
   style,
+  onClick = () => {},
   ...rest
 }) => {
   const classes = styles()
@@ -24,7 +25,7 @@ const Link = ({
   if (!normal) {
     return (
       <RouteLink href={!disabled && href} {...rest}>
-        <a className={classNames} style={style}>
+        <a className={classNames} style={style} onClick={onClick}>
           {children}
         </a>
       </RouteLink>
@@ -32,7 +33,7 @@ const Link = ({
   }
 
   return (
-    <a href={!disabled ? href : null} className={classNames}>
+    <a href={!disabled ? href : null} className={classNames} {...rest}>
       {children}
     </a>
   )

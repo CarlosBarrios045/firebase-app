@@ -8,7 +8,7 @@ import { createUser } from "./db"
 const auth = firebase.auth()
 const db = firebase.firestore()
 
-const response = (error, success) => ({ error, success })
+const response = (message, success) => ({ message, success })
 
 const authContext = createContext()
 
@@ -24,8 +24,8 @@ export function AuthProvider({ children }) {
 }
 
 function useProvideAuth() {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(false)
+  const [isLoading, setLoading] = useState(true)
 
   const handleUser = async (rawUser) => {
     if (rawUser) {
@@ -53,15 +53,6 @@ function useProvideAuth() {
     setLoading(true)
 
     try {
-      /* const verifyDNI = (snapshot) => {
-        const filt = (snapshot) => filter(snapshot.docs, (item) => item.data()?.dni === dni)
-        if(isEmpty(filt)) {
-
-        } else {
-          console.log()
-        }
-
-      } */
       const Users = await db.collection("users")
 
       // Get Users
@@ -105,20 +96,26 @@ function useProvideAuth() {
       await createUser(user.uid, { ...userWithoutToken, dni })
 
       setLoading(false)
-      return response("Usuario creado correctamente", true)
+      Router.push("/")
     } catch (error) {
       console.error("Sign Up ->", error)
       setLoading(false)
     }
   }
 
-  const signinWithEmail = (email, password) => {
+  const signinWithEmail = async ({ email, password }) => {
     setLoading(true)
-    return auth.signInWithEmailAndPassword(email, password).then((response) => {
-      console.log({ res: response.user })
-      handleUser(response.user)
+    try {
+      const { user } = await auth.signInWithEmailAndPassword(email, password)
+
+      console.log({ res: user })
+      handleUser(user)
       Router.push("/")
-    })
+    } catch (error) {
+      setLoading(false)
+      console.error("Sign In ->", error)
+      return error?.message
+    }
   }
 
   /* const signinWithGitHub = (redirect) => {
@@ -148,9 +145,8 @@ function useProvideAuth() {
   } */
 
   const signOut = () => {
-    Router.push("/iniciar-sesion")
-
-    return auth.signOut().then(() => handleUser(false))
+    auth.signOut().then(() => handleUser(false))
+    return Router.push("/iniciar-sesion")
   }
 
   useEffect(() => {
@@ -162,7 +158,7 @@ function useProvideAuth() {
 
   return {
     user,
-    loading,
+    isLoading,
     signUp,
     signinWithEmail,
     signOut,
