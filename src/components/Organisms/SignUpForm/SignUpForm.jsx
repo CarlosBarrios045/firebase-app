@@ -1,4 +1,5 @@
 import { useFormik } from "formik"
+import Router from "next/router"
 
 // Layout
 import { Text, Input, Button, Link, Paper } from "src/components/Atoms"
@@ -6,6 +7,9 @@ import { Text, Input, Button, Link, Paper } from "src/components/Atoms"
 // Validations
 import useValidations from "src/hooks/useValidations"
 import useValidationsInput from "src/hooks/useValidationsInput"
+
+// Auth
+import { useAuth } from "src/lib/auth"
 
 // Styles
 import { makeStyles } from "@material-ui/core/styles"
@@ -59,12 +63,30 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
 const SignUpForm = () => {
   const classes = styles()
 
+  // Validations
   const { SignupSchema } = useValidations()
   const { funcIsError, funcIsTextError } = useValidationsInput()
 
-  const { handleSubmit, errors, values, handleChange, touched } = useFormik({
+  // Func SignUp
+  const { signUp: SignUpFirebase } = useAuth()
+
+  const {
+    handleSubmit,
+    errors,
+    values,
+    handleChange,
+    touched,
+    setErrors,
+  } = useFormik({
     initialValues: { name: "", dni: "", email: "", password: "" },
-    onSubmit: (values) => console.log({ values }),
+    onSubmit: async (values) => {
+      const { success, error } = await SignUpFirebase(values)
+      if (success) {
+        Router.push("/")
+      } else {
+        setErrors(error)
+      }
+    },
     validationSchema: SignupSchema,
   })
 

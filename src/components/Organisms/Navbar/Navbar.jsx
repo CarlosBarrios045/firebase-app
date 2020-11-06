@@ -4,9 +4,11 @@ import { useRouter } from "next/router"
 // Redux
 import { connect } from "react-redux"
 
+// Auth
+import { useAuth } from "src/lib/auth"
+
 // Actions
 import { toggleSidebar } from "src/store/modules/layout/actions"
-import { signOut } from "src/store/modules/auth/actions"
 
 // Icons
 import { RiDashboardLine } from "react-icons/ri"
@@ -46,14 +48,17 @@ HideOnScroll.propTypes = {
   children: element,
 }
 
-const Navbar = ({ toggleSidebar, openSidebar, isAuth, signOut }) => {
+const Navbar = ({ toggleSidebar, openSidebar }) => {
   const classes = styles()
   const theme = useTheme()
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"))
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"))
-  const validateMenu = isAuth || matchesSm
 
   const { push } = useRouter()
+
+  // Auth
+  const { user, signOut } = useAuth()
+  const validateMenu = user || matchesSm
 
   return (
     <HideOnScroll openSidebar={openSidebar}>
@@ -88,7 +93,7 @@ const Navbar = ({ toggleSidebar, openSidebar, isAuth, signOut }) => {
 
           {!matchesSm && (
             <>
-              {isAuth ? (
+              {user ? (
                 <>
                   <div>
                     <Button className={classes.button} color="secondary">
@@ -136,13 +141,8 @@ const Navbar = ({ toggleSidebar, openSidebar, isAuth, signOut }) => {
   )
 }
 
-const mapStateToProps = ({
-  layout: { openCart, openSidebar },
-  auth: { isAuth },
-}) => ({
-  openCart,
+const mapStateToProps = ({ layout: { openSidebar } }) => ({
   openSidebar,
-  isAuth,
 })
 
-export default connect(mapStateToProps, { toggleSidebar, signOut })(Navbar)
+export default connect(mapStateToProps, { toggleSidebar })(Navbar)

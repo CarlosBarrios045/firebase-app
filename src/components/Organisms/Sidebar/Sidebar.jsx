@@ -5,9 +5,15 @@ import map from "lodash/map"
 import { connect } from "react-redux"
 import { closeSidebar } from "src/store/modules/layout/actions"
 
+// Auth
+import { useAuth } from "src/lib/auth"
+
 // Layout
 import { Drawer } from "@material-ui/core"
 import Link from "src/components/Atoms/Link"
+
+// Icon
+import { IoIosLogOut } from "react-icons/io"
 
 // Data
 import data from "./data"
@@ -16,8 +22,11 @@ import dataAuth from "./dataAuth"
 // Styles
 import styles from "./styles"
 
-const Sidebar = ({ open, isAuth }) => {
+const Sidebar = ({ open }) => {
   const classes = styles()
+
+  // Auth
+  const { user, signOut } = useAuth()
 
   return (
     <div className={classes.root}>
@@ -37,7 +46,7 @@ const Sidebar = ({ open, isAuth }) => {
           <div className={classes.content}>
             <div className={classes.contentLinks}>
               <div>
-                {map(isAuth ? dataAuth : data, ({ Icon, href, link, size }) => (
+                {map(user ? dataAuth : data, ({ Icon, href, link, size }) => (
                   <Link href={href} key={href}>
                     <Icon
                       size={!size ? 24 : size}
@@ -46,6 +55,12 @@ const Sidebar = ({ open, isAuth }) => {
                     {link}
                   </Link>
                 ))}
+                {user && (
+                  <Link href="" onClick={signOut}>
+                    <IoIosLogOut size={24} style={{ marginRight: 12 }} />
+                    Cerrar sesión
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -55,9 +70,8 @@ const Sidebar = ({ open, isAuth }) => {
   )
 }
 
-const mapStateToProps = ({ layout: { openSidebar }, auth: { isAuth } }) => ({
+const mapStateToProps = ({ layout: { openSidebar } }) => ({
   open: openSidebar,
-  isAuth,
 })
 
 export default connect(mapStateToProps, { closeSidebar })(Sidebar)

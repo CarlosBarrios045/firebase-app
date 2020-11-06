@@ -10,7 +10,8 @@ import wrapperRedux from "src/store"
 import { store } from "src/store/store"
 
 // Auth Connect
-import AuthConnect from "src/hooks/AuthConnect"
+import { AuthProvider } from "src/lib/auth"
+import AuthVerify from "src/hooks/AuthVerify"
 
 // Material UI
 import { ThemeProvider } from "@material-ui/core/styles"
@@ -39,16 +40,18 @@ const MyApp = ({ Component, pageProps }) => {
 
       {/* Redux Store */}
       <Provider store={store}>
-        <AuthConnect store={store}>
-          <ThemeProvider theme={theme}>
-            {/* Reset CSS */}
-            <CssBaseline />
+        <AuthProvider>
+          <AuthVerify>
+            <ThemeProvider theme={theme}>
+              {/* Reset CSS */}
+              <CssBaseline />
 
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
-        </AuthConnect>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ThemeProvider>
+          </AuthVerify>
+        </AuthProvider>
       </Provider>
     </>
   )

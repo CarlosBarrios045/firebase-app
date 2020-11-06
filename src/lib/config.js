@@ -1,4 +1,4 @@
-const firebaseConfig = {
+export const config = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
   databaseURL: process.env.NEXT_PUBLIC_DATABASE_URL,
@@ -8,4 +8,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_APP_ID,
 }
 
-export default firebaseConfig
+export const configAdmin = {
+  project_id: process.env.NEXT_PUBLIC_PROJECT_ID,
+  //  client_email: process.env.FIREBASE_CLIENT_EMAIL,
+  //  private_key: process.env.FIREBASE_PRIVATE_KEY,
+}
