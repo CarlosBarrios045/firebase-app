@@ -1,5 +1,6 @@
 import { element } from "prop-types"
 import { useRouter } from "next/router"
+import classnames from "classnames"
 
 // Redux
 import { connect } from "react-redux"
@@ -54,22 +55,33 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"))
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"))
 
-  const { push } = useRouter()
+  const { push, pathname } = useRouter()
 
   // Auth
   const { user, signOut } = useAuth()
   const validateMenu = user || matchesSm
+  const isLogin = pathname === "/iniciar-sesion" && matchesSm
 
   return (
     <HideOnScroll openSidebar={openSidebar}>
       <AppBar position="sticky" className={classes.root}>
-        <Container className={classes.content} fixed>
+        <Container
+          className={classnames({
+            [classes.content]: true,
+            [classes.contentInvisible]: isLogin,
+          })}
+          fixed
+        >
           <Box display="flex" alignItems="center">
             {validateMenu && (
               <IconButton
                 edge="start"
                 color="secondary"
-                className={`${classes.menuButton} ${classes.right}`}
+                className={classnames({
+                  [classes.menuButton]: true,
+                  [classes.right]: true,
+                  [classes.invisible]: isLogin,
+                })}
                 aria-label="menu"
                 onClick={toggleSidebar}
               >

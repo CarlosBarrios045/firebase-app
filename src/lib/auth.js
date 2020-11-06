@@ -145,8 +145,10 @@ function useProvideAuth() {
   } */
 
   const signOut = () => {
-    auth.signOut().then(() => handleUser(false))
-    return Router.push("/iniciar-sesion")
+    auth.signOut().then(() => {
+      handleUser(false)
+      Router.push("/iniciar-sesion")
+    })
   }
 
   useEffect(() => {

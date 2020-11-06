@@ -4,13 +4,13 @@ import { FiShoppingBag } from "react-icons/fi"
 export default [
   {
     Icon: BiUserCircle,
-    link: "Mi Perfil",
+    link: "Perfil",
     href: "/perfil",
   },
   {
     Icon: FiShoppingBag,
-    link: "Mis Productos",
-    href: "/mis-productos",
+    link: "Productos",
+    href: "/productos",
     size: 22,
   },
   {

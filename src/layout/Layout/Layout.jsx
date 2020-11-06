@@ -34,7 +34,7 @@ const styles = makeStyles(({ breakpoints }) => ({
   },
 }))
 
-const Layout = ({ isAuth, children }) => {
+const Layout = ({ children }) => {
   const classes = styles()
 
   return (

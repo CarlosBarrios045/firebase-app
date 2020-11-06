@@ -11,7 +11,7 @@ import { store } from "src/store/store"
 
 // Auth Connect
 import { AuthProvider } from "src/lib/auth"
-import AuthVerify from "src/hooks/AuthVerify"
+import ProtectRoute from "src/hooks/ProtectRoute"
 
 // Material UI
 import { ThemeProvider } from "@material-ui/core/styles"
@@ -41,7 +41,7 @@ const MyApp = ({ Component, pageProps }) => {
       {/* Redux Store */}
       <Provider store={store}>
         <AuthProvider>
-          <AuthVerify>
+          <ProtectRoute>
             <ThemeProvider theme={theme}>
               {/* Reset CSS */}
               <CssBaseline />
@@ -50,7 +50,7 @@ const MyApp = ({ Component, pageProps }) => {
                 <Component {...pageProps} />
               </Layout>
             </ThemeProvider>
-          </AuthVerify>
+          </ProtectRoute>
         </AuthProvider>
       </Provider>
     </>

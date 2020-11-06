@@ -15,7 +15,7 @@ import { closeSidebar } from "src/store/modules/layout/actions"
 
 import routes from "./routes"
 
-const AuthVerify = ({ children }) => {
+const ProtectRoute = ({ children }) => {
   // Auth
   const { user, isLoading } = useAuth()
 
@@ -62,4 +62,4 @@ const AuthVerify = ({ children }) => {
   return <>{children}</>
 }
 
-export default AuthVerify
+export default ProtectRoute

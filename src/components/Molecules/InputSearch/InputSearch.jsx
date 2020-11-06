@@ -16,9 +16,13 @@ const styles = makeStyles(({ palette, breakpoints, transitions }) => ({
     padding: "10px",
     fontSize: 15,
 
-    [breakpoints.up("md")]: {
+    "&:focus": {
+      width: 240,
+    },
+
+    [breakpoints.only("sm")]: {
       "&:focus": {
-        width: 240,
+        width: 200,
       },
     },
   },

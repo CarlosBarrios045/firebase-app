@@ -20,6 +20,7 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
     },
 
     [breakpoints.down("xs")]: {
+      minHeight: "calc(100vh - 110px)",
       gridTemplateRows: "auto 8%",
     },
   },
