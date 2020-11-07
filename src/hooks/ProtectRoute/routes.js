@@ -22,6 +22,10 @@ export default [
     restricted: true,
   },
   {
+    pathname: "/nuevp-producto",
+    restricted: true,
+  },
+  {
     pathname: "/productos/[id]",
     restricted: true,
   },
