@@ -1,4 +1,3 @@
-import { BiHelpCircle } from "react-icons/bi"
 import { FiShoppingBag } from "react-icons/fi"
 import { IoIosAddCircleOutline } from "react-icons/io"
 
@@ -13,10 +12,5 @@ export default [
     Icon: IoIosAddCircleOutline,
     link: "Nuevo producto",
     href: "/nuevo-producto",
-  },
-  {
-    Icon: BiHelpCircle,
-    link: "Ayuda",
-    href: "/ayuda",
   },
 ]

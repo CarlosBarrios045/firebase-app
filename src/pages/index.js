@@ -7,7 +7,7 @@ import { Text, Button } from "src/components/Atoms"
 import ProductList from "src/components/Molecules/ProductList"
 
 // Firebase
-import { db } from "src/lib/db"
+import { getProductsFirebase } from "src/lib/db"
 
 // Styles
 import { makeStyles } from "@material-ui/core/styles"
@@ -65,10 +65,7 @@ const Home = () => {
   }
 
   const getProductos = async () => {
-    await db
-      .collection("products")
-      .orderBy("created", "desc")
-      .onSnapshot(handleProductos)
+    await getProductsFirebase(handleProductos)
   }
 
   useEffect(() => {

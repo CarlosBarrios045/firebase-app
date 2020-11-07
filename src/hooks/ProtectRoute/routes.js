@@ -1,40 +1,33 @@
 export default [
-  // Restricted: false
+  // type: restricted
   {
     pathname: "/iniciar-sesion",
-    restricted: false,
+    type: "restricted",
   },
   {
     pathname: "/crear-cuenta",
-    restricted: false,
+    type: "restricted",
   },
-  {
-    pathname: "/olvidaste-tu-contraseña",
-    restricted: false,
-  },
-  // Restricted: true
+  // type: public
   {
     pathname: "/",
-    restricted: true,
+    type: "public",
   },
   {
     pathname: "/productos",
-    restricted: true,
-  },
-  {
-    pathname: "/nuevo-producto",
-    restricted: true,
+    type: "public",
   },
   {
     pathname: "/productos/[id]",
-    restricted: true,
-  },
-  {
-    pathname: "/perfil",
-    restricted: true,
+    type: "public",
   },
   {
     pathname: "/populares",
-    restricted: true,
+    type: "public",
+  },
+  // type: private
+  {
+    pathname: "/nuevo-producto",
+    type: "private",
   },
 ]

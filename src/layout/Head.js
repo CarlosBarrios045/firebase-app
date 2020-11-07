@@ -2,10 +2,9 @@ import NextHead from "next/head"
 import { string } from "prop-types"
 import theme from "../theme"
 
-const title = "Guanare Market"
+const title = "Firebase App"
 const URL = process.env.NEXT_PUBLIC_URI
-const description =
-  "Ten a detalle los productos qué venden las empresas qué hay en tu ciudad fácil y rápido desde tu navegador web"
+const description = "App de Firebase y Next - CRUD de productos"
 const ogImage = "/images/draw/add_to_cart.png"
 
 const Head = () => (
@@ -14,18 +13,11 @@ const Head = () => (
     <title>{title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta
-      name="keywords"
-      content="guanare, market, ecommerce, mercado, productos, empresas, portuguesa, venezuela, mercadolibre, marketplace, ciudad, compra, venta"
-    />
+    <meta name="keywords" content="firebase, next, app, crud, products" />
     <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
     <meta name="format-detection" content="telephone=no" />
     {/* PWA primary color */}
     <meta name="theme-color" content={theme.palette.primary.main} />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
 
     {/* Helps prevent duplicate content issues */}
     <link rel="canonical" href={URL} />

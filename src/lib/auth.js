@@ -27,7 +27,7 @@ function useProvideAuth() {
   const [user, setUser] = useState(false)
   const [isLoading, setLoading] = useState(true)
 
-  const handleUser = async (rawUser) => {
+  const handleUser = async (rawUser = false) => {
     if (rawUser) {
       const user = await formatUser(rawUser)
       const { /* token */ ...userWithoutToken } = user

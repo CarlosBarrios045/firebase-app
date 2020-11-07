@@ -32,6 +32,10 @@ export const newProductSchema = Yup.object().shape({
   image: Yup.mixed().required("La imagen es requerida"),
 })
 
+export const newCommentSchema = Yup.object().shape({
+  comment: Yup.string().required(required),
+})
+
 export default function useValidations() {
-  return { SignUpSchema, SignInSchema, newProductSchema }
+  return { SignUpSchema, SignInSchema, newProductSchema, newCommentSchema }
 }

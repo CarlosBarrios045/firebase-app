@@ -9,9 +9,8 @@ import { useAuth } from "src/lib/auth"
 
 // Redux
 import { useDispatch } from "react-redux"
-
-// Actions
 import { closeSidebar } from "src/store/modules/layout/actions"
+import { setRouteType } from "src/store/modules/routes/actions"
 
 import routes from "./routes"
 
@@ -28,25 +27,32 @@ const ProtectRoute = ({ children }) => {
   useEffect(() => {
     if (!isLoading) {
       // Check that a new route is OK
-      const routeCurrent = filterRoute()?.restricted
-
-      const handleRouteChange = (url) => {
+      const handleRouteChange = async (url) => {
         // If change of route, close sidebar
         dispatch(closeSidebar())
 
-        const newRouteCurrent = filterRoute(url)?.restricted
-        if (newRouteCurrent && !user) {
-          push("/iniciar-sesion")
-        } else if (user && !newRouteCurrent) {
-          push("/")
+        const routeType = filterRoute(url)?.type
+
+        if (routeType !== undefined) {
+          dispatch(setRouteType(routeType))
+          if (routeType === "private" && !user) {
+            push("/iniciar-sesion")
+          } else if (user && routeType === "restricted") {
+            push("/")
+          }
         }
       }
 
+      const routeType = filterRoute()?.type
+
       // Check that initial route is OK
-      if (routeCurrent && !user) {
-        push("/iniciar-sesion")
-      } else if (user && !routeCurrent) {
-        push("/")
+      if (routeType !== undefined) {
+        dispatch(setRouteType(routeType))
+        if (routeType === "private" && !user) {
+          push("/iniciar-sesion")
+        } else if (user && routeType === "restricted") {
+          push("/")
+        }
       }
 
       // Monitor routes
@@ -55,7 +61,7 @@ const ProtectRoute = ({ children }) => {
         events.off("routeChangeStart", handleRouteChange)
       }
     }
-  }, [user, pathname, isLoading])
+  }, [pathname, isLoading])
 
   // Return Loader
   if (isLoading) return null

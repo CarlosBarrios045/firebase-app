@@ -13,6 +13,7 @@ import { Text, Button, Input, Image } from "src/components/Atoms"
 
 // Firebase
 import { createProduct, storageRef, newFileName } from "src/lib/db"
+import { useAuth } from "src/lib/auth"
 
 // Styles
 import { makeStyles } from "@material-ui/core/styles"
@@ -78,6 +79,7 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
 const NewProduct = () => {
   const classes = styles()
   const [image, setImage] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   // Validations
   const { newProductSchema } = useValidations()
@@ -106,13 +108,21 @@ const NewProduct = () => {
   })
   const { ref, ...rootProps } = getRootProps()
 
+  const { user } = useAuth()
   const funcCreateProduct = async ({ image, ...values }) => {
+    setLoading(true)
     const data = {
       ...values,
       votes: 0,
+      votesUser: [],
       comments: [],
       created: Date.now(),
       image: "",
+      user: {
+        id: user.uid,
+        name: user.name,
+        email: user.email,
+      },
     }
 
     try {
@@ -139,14 +149,16 @@ const NewProduct = () => {
             uploadTask.snapshot.ref
               .getDownloadURL()
               .then(async (downloadURL) => {
+                setLoading(false)
                 data.image = downloadURL
                 await createProduct(data)
-                Router.push("/productos")
+                Router.push("/")
               })
           }
         )
       }
     } catch (error) {
+      setLoading(false)
       console.error("Upload file ->", error)
     }
   }
@@ -216,6 +228,7 @@ const NewProduct = () => {
               touched.description
             )}
             color="secondary"
+            multiline
           />
 
           <CardActionArea {...rootProps} className={classes.paperFile}>
@@ -246,9 +259,13 @@ const NewProduct = () => {
             )}
           </div>
 
-          <Button color="secondary" variant="contained" type="submit">
-            Agregar producto
-          </Button>
+          {loading ? (
+            <Text>Cargando...</Text>
+          ) : (
+            <Button color="secondary" variant="contained" type="submit">
+              Agregar producto
+            </Button>
+          )}
         </form>
       </Container>
     </div>

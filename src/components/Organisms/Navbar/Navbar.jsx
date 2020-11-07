@@ -56,12 +56,10 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"))
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"))
 
-  const { push, pathname } = useRouter()
+  const { push } = useRouter()
 
   // Auth
   const { user, signOut } = useAuth()
-  const validateMenu = user || matchesSm
-  const isLogin = pathname === "/iniciar-sesion" && matchesSm
 
   return (
     <HideOnScroll openSidebar={openSidebar}>
@@ -69,40 +67,37 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
         <Container
           className={classnames({
             [classes.content]: true,
-            [classes.contentInvisible]: isLogin,
           })}
           fixed
         >
           <Box display="flex" alignItems="center">
-            {validateMenu && (
-              <IconButton
-                edge="start"
-                color="secondary"
-                className={classnames({
-                  [classes.menuButton]: true,
-                  [classes.right]: true,
-                  [classes.invisible]: isLogin,
-                })}
-                aria-label="menu"
-                onClick={toggleSidebar}
-              >
-                {openSidebar ? (
-                  <IoIosArrowRoundBack color="#fff" />
-                ) : (
-                  <div className={classes.menuContent}>
-                    <div />
-                    <div />
-                  </div>
-                )}
-              </IconButton>
-            )}
+            <IconButton
+              edge="start"
+              color="secondary"
+              className={classnames({
+                [classes.menuButton]: true,
+                [classes.right]: true,
+              })}
+              aria-label="menu"
+              onClick={toggleSidebar}
+            >
+              {openSidebar ? (
+                <IoIosArrowRoundBack color="#fff" />
+              ) : (
+                <div className={classes.menuContent}>
+                  <div />
+                  <div />
+                </div>
+              )}
+            </IconButton>
+
             <Link href="/" className={classes.title}>
               Firebase App
               <RiDashboardLine style={{ marginLeft: 10 }} />
             </Link>
           </Box>
 
-          {!matchesXs && user && <InputSearch />}
+          {!matchesXs && <InputSearch />}
 
           {!matchesSm && (
             <>
@@ -117,7 +112,13 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
                       </Avatar>
                       <Text className={classes.textAvatar}>{user?.name}</Text>
                     </Button>
-
+                    <Button
+                      className={classes.button}
+                      color="secondary"
+                      onClick={() => push("/")}
+                    >
+                      Productos
+                    </Button>
                     <Button
                       className={classes.button}
                       color="secondary"
@@ -129,6 +130,13 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
                 </>
               ) : (
                 <div>
+                  <Button
+                    className={classes.button}
+                    color="secondary"
+                    onClick={() => push("/")}
+                  >
+                    Productos
+                  </Button>
                   <Button
                     className={classes.button}
                     color="secondary"

@@ -1,4 +1,4 @@
-import { FiLogIn, FiLock } from "react-icons/fi"
+import { FiLogIn, FiShoppingBag } from "react-icons/fi"
 import { BiUserCircle } from "react-icons/bi"
 
 export default [
@@ -13,8 +13,9 @@ export default [
     href: "/crear-cuenta",
   },
   {
-    Icon: FiLock,
-    link: "¿Olvidaste tu contraseña?",
-    href: "/olvidaste-tu-contraseña",
+    Icon: FiShoppingBag,
+    link: "Productos",
+    href: "/",
+    size: 22,
   },
 ]

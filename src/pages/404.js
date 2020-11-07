@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useEffect } from "react"
 
 // Next
-import Router from "next/router";
+import Router from "next/router"
 
 const PageNotFound = () => {
   useEffect(() => {
-    Router.push("/");
-  }, []);
+    console.log("Not Found")
+    Router.push("/")
+  }, [])
 
-  return null;
-};
+  return null
+}
 
-export default PageNotFound;
+export default PageNotFound
