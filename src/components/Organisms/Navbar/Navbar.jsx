@@ -14,6 +14,7 @@ import { toggleSidebar } from "src/store/modules/layout/actions"
 // Icons
 import { RiDashboardLine } from "react-icons/ri"
 import { IoIosArrowRoundBack } from "react-icons/io"
+import { FiUser } from "react-icons/fi"
 
 // Components
 import {
@@ -110,11 +111,11 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
                   <div>
                     <Button className={classes.button} color="secondary">
                       <Avatar className={classes.avatar}>
-                        <Text>JB</Text>
+                        <Text>
+                          <FiUser />
+                        </Text>
                       </Avatar>
-                      <Text className={classes.textAvatar}>
-                        Juan Carlos Barrios
-                      </Text>
+                      <Text className={classes.textAvatar}>{user?.name}</Text>
                     </Button>
 
                     <Button

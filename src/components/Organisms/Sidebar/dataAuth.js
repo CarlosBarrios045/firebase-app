@@ -1,17 +1,18 @@
-import { BiUserCircle, BiHelpCircle } from "react-icons/bi"
+import { BiHelpCircle } from "react-icons/bi"
 import { FiShoppingBag } from "react-icons/fi"
+import { IoIosAddCircleOutline } from "react-icons/io"
 
 export default [
   {
-    Icon: BiUserCircle,
-    link: "Perfil",
-    href: "/perfil",
-  },
-  {
     Icon: FiShoppingBag,
     link: "Productos",
-    href: "/productos",
+    href: "/",
     size: 22,
+  },
+  {
+    Icon: IoIosAddCircleOutline,
+    link: "Nuevo producto",
+    href: "/nuevo-producto",
   },
   {
     Icon: BiHelpCircle,

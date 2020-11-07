@@ -22,7 +22,7 @@ export default [
     restricted: true,
   },
   {
-    pathname: "/nuevp-producto",
+    pathname: "/nuevo-producto",
     restricted: true,
   },
   {

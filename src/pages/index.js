@@ -75,8 +75,6 @@ const Home = () => {
     getProductos()
   }, [])
 
-  console.log({ products })
-
   return (
     <div className={classes.root}>
       <Container className={classes.container}>

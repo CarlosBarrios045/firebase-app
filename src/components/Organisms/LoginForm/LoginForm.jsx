@@ -1,10 +1,12 @@
 import { useFormik } from "formik"
+import Router from "next/router"
 
 // Layout
 import { Text, Input, Button, Link, Paper } from "src/components/Atoms"
 
 // Auth
 import { useAuth } from "src/lib/auth"
+import { auth } from "src/lib/db"
 
 // Validations
 import useValidations from "src/hooks/useValidations"
@@ -65,7 +67,7 @@ const LoginForm = () => {
   const { funcIsError, funcIsTextError } = useValidationsInput()
 
   // Func SignUp
-  const { signinWithEmail } = useAuth()
+  const { handleUser } = useAuth()
 
   const {
     handleSubmit,
@@ -76,12 +78,37 @@ const LoginForm = () => {
     setErrors,
   } = useFormik({
     initialValues: { email: "", password: "" },
-    onSubmit: async (values) => {
-      const { success } = await signinWithEmail(values)
-      if (!success) {
-        setErrors({
-          password: "El correo electrónico o contraseña son incorrectos",
-        })
+    onSubmit: async ({ email, password }) => {
+      try {
+        const { user } = await auth.signInWithEmailAndPassword(email, password)
+        handleUser(user)
+        Router.push("/")
+      } catch (error) {
+        console.error("Sign In ->", error)
+
+        switch (error?.code) {
+          case "auth/wrong-password":
+            setErrors({
+              password: "La contraseña es incorrecta",
+            })
+            break
+
+          case "auth/user-not-found":
+            setErrors({
+              password: "El usuario no existe",
+            })
+            break
+
+          case "auth/too-many-requests":
+            setErrors({
+              password:
+                "Realizaste muchos intentos fallidos, cuenta desactivada temporalmente.",
+            })
+            break
+
+          default:
+            break
+        }
       }
     },
     validationSchema: SignInSchema,

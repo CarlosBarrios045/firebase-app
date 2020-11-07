@@ -73,7 +73,6 @@ const MiniMap = () => {
       <ReactMapGL
         {...viewport}
         onViewportChange={(nextViewport) => {
-          console.log({ nextViewport })
           setViewport(nextViewport)
         }}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_TOKEN_MAPBOX}

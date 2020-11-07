@@ -103,21 +103,6 @@ function useProvideAuth() {
     }
   }
 
-  const signinWithEmail = async ({ email, password }) => {
-    setLoading(true)
-    try {
-      const { user } = await auth.signInWithEmailAndPassword(email, password)
-
-      console.log({ res: user })
-      handleUser(user)
-      Router.push("/")
-    } catch (error) {
-      setLoading(false)
-      console.error("Sign In ->", error)
-      return error?.message
-    }
-  }
-
   const signOut = () => {
     auth.signOut().then(() => {
       handleUser(false)
@@ -136,7 +121,7 @@ function useProvideAuth() {
     user,
     isLoading,
     signUp,
-    signinWithEmail,
+    handleUser,
     signOut,
   }
 }
