@@ -18,11 +18,19 @@ export default [
     restricted: true,
   },
   {
+    pathname: "/productos",
+    restricted: true,
+  },
+  {
+    pathname: "/productos/[id]",
+    restricted: true,
+  },
+  {
     pathname: "/perfil",
     restricted: true,
   },
   {
-    pathname: "/productos",
+    pathname: "/populares",
     restricted: true,
   },
 ]

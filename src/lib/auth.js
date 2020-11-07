@@ -118,32 +118,6 @@ function useProvideAuth() {
     }
   }
 
-  /* const signinWithGitHub = (redirect) => {
-    setLoading(true)
-    return auth
-      .signInWithPopup(new firebase.auth.GithubAuthProvider())
-      .then((response) => {
-        handleUser(response.user)
-
-        if (redirect) {
-          Router.push(redirect)
-        }
-      })
-  }
-
-  const signinWithGoogle = (redirect) => {
-    setLoading(true)
-    return  auth
-      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then((response) => {
-        handleUser(response.user)
-
-        if (redirect) {
-          Router.push(redirect)
-        }
-      })
-  } */
-
   const signOut = () => {
     auth.signOut().then(() => {
       handleUser(false)

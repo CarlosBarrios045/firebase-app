@@ -22,6 +22,7 @@ import Layout from "src/layout/Layout"
 
 // Theme
 import theme from "../theme"
+import "../styles/fonts.css"
 import "../styles/globals.css"
 
 const MyApp = ({ Component, pageProps }) => {

@@ -24,7 +24,6 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
     fontSize: 34,
     textAlign: "center",
     fontWeight: "bold",
-    color: palette.secondary.main,
 
     [breakpoints.down("sm")]: {
       marginTop: 0,

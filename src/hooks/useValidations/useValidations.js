@@ -24,6 +24,14 @@ const SignInSchema = Yup.object().shape({
   password,
 })
 
+export const newProductSchema = Yup.object().shape({
+  name: Yup.string().required(required),
+  company: Yup.string().required(required),
+  url: Yup.string().required(required).url("No es una URL válida"),
+  description: Yup.string().required(required),
+  image: Yup.mixed().required("La imagen es requerida"),
+})
+
 export default function useValidations() {
-  return { SignUpSchema, SignInSchema }
+  return { SignUpSchema, SignInSchema, newProductSchema }
 }

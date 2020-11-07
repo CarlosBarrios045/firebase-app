@@ -68,7 +68,7 @@ export default makeStyles(({ palette, breakpoints, spacing }) => ({
   },
   contentInvisible: {
     justifyContent: "center",
-    padding: "8px 0",
+    padding: 8,
   },
   invisible: {
     display: "none",
