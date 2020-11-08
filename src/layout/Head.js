@@ -5,7 +5,7 @@ import theme from "../theme"
 const title = "Firebase App"
 const URL = process.env.NEXT_PUBLIC_URI
 const description = "App de Firebase y Next - CRUD de productos"
-const ogImage = "/images/draw/add_to_cart.png"
+const ogImage = "/image-seo.png"
 
 const Head = () => (
   <NextHead>
