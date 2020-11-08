@@ -148,7 +148,6 @@ const LoginForm = () => {
         </Button>
 
         <div className={classes.contentLinks}>
-          <Link href="/olvidaste-tu-contraseña">¿Olvidaste tu contraseña?</Link>
           <Link href="/crear-cuenta">Crear cuenta</Link>
         </div>
       </form>
