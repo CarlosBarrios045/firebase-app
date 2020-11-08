@@ -1,4 +1,5 @@
-// import { useState } from "react"
+import { useState } from "react"
+import Router from "next/router"
 
 // Layout
 import { InputAdornment, IconButton } from "@material-ui/core"
@@ -44,16 +45,30 @@ const styles = makeStyles(({ palette, breakpoints, transitions }) => ({
 
 const InputSearch = () => {
   const classes = styles()
+  const [search, setSearch] = useState("")
+
+  const handleSearch = () => {
+    if (search.trim() === "") return
+
+    Router.push({
+      pathname: "/buscar",
+      query: {
+        q: search,
+      },
+    })
+  }
 
   return (
     <div className={classes.contentInput}>
       <Input
         className={classes.inputSearch}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
         InputProps={{
           classes: { input: classes.input, root: classes.underline },
           startAdornment: (
             <InputAdornment position="end">
-              <IconButton style={{ padding: "6px 2px" }}>
+              <IconButton style={{ padding: "6px 2px" }} onClick={handleSearch}>
                 <FiSearch style={{ margin: "0 5px" }} size={16} />
               </IconButton>
             </InputAdornment>

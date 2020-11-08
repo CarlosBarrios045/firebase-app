@@ -122,6 +122,13 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
                     <Button
                       className={classes.button}
                       color="secondary"
+                      onClick={() => push("/populares")}
+                    >
+                      Populares
+                    </Button>
+                    <Button
+                      className={classes.button}
+                      color="secondary"
                       onClick={signOut}
                     >
                       Cerrar sesión
@@ -136,6 +143,13 @@ const Navbar = ({ toggleSidebar, openSidebar }) => {
                     onClick={() => push("/")}
                   >
                     Productos
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    color="secondary"
+                    onClick={() => push("/populares")}
+                  >
+                    Populares
                   </Button>
                   <Button
                     className={classes.button}

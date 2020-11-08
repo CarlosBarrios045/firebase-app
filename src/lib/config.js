@@ -7,9 +7,3 @@ export const config = {
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_APP_ID,
 }
-
-export const configAdmin = {
-  project_id: process.env.NEXT_PUBLIC_PROJECT_ID,
-  //  client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  //  private_key: process.env.FIREBASE_PRIVATE_KEY,
-}

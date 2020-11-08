@@ -29,7 +29,7 @@ export default function ProductList({ product }) {
         className={classes.product}
         onClick={() => Router.push(`/productos/${id}`)}
       >
-        <Image src={image} alt="Product" />
+        <Image src={image} alt="Product" height="100%" />
         <CardContent className={classes.content}>
           <Text
             gutterBottom

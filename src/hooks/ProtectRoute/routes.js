@@ -25,6 +25,10 @@ export default [
     pathname: "/populares",
     type: "public",
   },
+  {
+    pathname: "/buscar",
+    type: "public",
+  },
   // type: private
   {
     pathname: "/nuevo-producto",

@@ -34,15 +34,11 @@ function useProvideAuth() {
       createUser(user.uid, userWithoutToken)
 
       setUser(user)
-      /*  cookie.set("fast-feedback-auth", true, {
-        expires: 1,
-      }) */
 
       setLoading(false)
       return user
     } else {
       setUser(false)
-      // cookie.remove("fast-feedback-auth")
 
       setLoading(false)
       return false

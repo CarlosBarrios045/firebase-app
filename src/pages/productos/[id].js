@@ -13,10 +13,14 @@ import useValidationsInput from "src/hooks/useValidationsInput"
 
 // Layout
 import { Container, Divider } from "@material-ui/core"
-import { Text, Image, Input, Button } from "src/components/Atoms"
+import { Text, Image, Input, Button, Paper } from "src/components/Atoms"
 
 // Firebase
-import { addVote, getProductFirebase } from "src/lib/db"
+import {
+  updateProductFirebase,
+  getProductFirebase,
+  deleteProductFirebase,
+} from "src/lib/db"
 import { useAuth } from "src/lib/auth"
 
 // Styles
@@ -36,7 +40,7 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
     display: "flex",
     flexDirection: "column",
 
-    "& p": {
+    "& p, h6, h1": {
       color: palette.secondary.main,
     },
   },
@@ -44,7 +48,6 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
   contentHeader: {
     width: "100%",
     "& > h1": {
-      color: palette.secondary.main,
       fontSize: 24,
       margin: "15px 0",
       fontWeight: "bold",
@@ -85,11 +88,25 @@ const styles = makeStyles(({ palette, breakpoints, fonts }) => ({
       textAlign: "center",
     },
   },
+  button: {
+    width: "100%",
+  },
+  comments: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column-reverse",
+  },
+  comment: {
+    backgroundColor: palette.primary.lighter,
+    marginTop: 10,
+  },
 }))
 
 const Product = () => {
   const classes = styles()
   const [data, setData] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [getDB, setGetDB] = useState(true)
 
   const {
     query: { id },
@@ -99,15 +116,16 @@ const Product = () => {
 
   // Get product
   useEffect(async () => {
-    if (id) {
+    if (id && getDB) {
       const product = await getProductFirebase(id)
+      setGetDB(false)
       if (!product.exists) {
         push("/")
       } else {
         setData({ id: product.id, ...product.data() })
       }
     }
-  }, [id])
+  }, [id, getDB])
 
   // Product
   const {
@@ -129,29 +147,69 @@ const Product = () => {
   const { newCommentSchema } = useValidations()
   const { funcIsError, funcIsTextError } = useValidationsInput()
 
-  const { handleSubmit, errors, values, handleChange, touched } = useFormik({
+  const {
+    handleSubmit,
+    errors,
+    values,
+    handleChange,
+    touched,
+    resetForm,
+  } = useFormik({
     initialValues: { comment: "" },
     onSubmit: async ({ comment }) => {
-      console.log(comment)
+      setLoading(true)
+      if (!user) {
+        push("/iniciar-sesion")
+      }
+
+      const newComment = {
+        content: comment,
+        user: {
+          id: user.uid,
+          name: user.name,
+        },
+      }
+
+      // Save DB
+      const newComments = [...comments, newComment]
+
+      await updateProductFirebase(idProduct, { comments: newComments })
+      setGetDB(true)
+
+      resetForm()
+      setLoading(false)
     },
     validationSchema: newCommentSchema,
   })
 
   // Votes
   const handleVote = async () => {
+    setLoading(true)
     if (!user) {
       push("/iniciar-sesion")
     }
 
     // Save DB
-    if (votesUser.includes(user.uid)) return
+    if (votesUser?.includes(user?.uid)) return
+
     const newVotes = votes + 1
     const newVotesUser = [...votesUser, user.uid]
 
-    await addVote(idProduct, { votes: newVotes, votesUser: newVotesUser })
+    await updateProductFirebase(idProduct, {
+      votes: newVotes,
+      votesUser: newVotesUser,
+    })
+    setGetDB(true)
 
     // Save local
-    setData({ ...data, votes: newVotes, votesUser: newVotesUser })
+    setLoading(false)
+  }
+
+  const handleDelete = async () => {
+    if (user.uid !== userProduct.id) return
+
+    await deleteProductFirebase(idProduct)
+    push("/")
   }
 
   // Loading
@@ -191,7 +249,7 @@ const Product = () => {
             <Text>Votos: {votes}</Text>
             {user && user.uid !== userProduct.id && (
               <>
-                {votesUser.includes(user.uid) ? (
+                {votesUser?.includes(user?.uid) ? (
                   <Button color="secondary" variant="contained">
                     Ya votaste
                   </Button>
@@ -199,7 +257,7 @@ const Product = () => {
                   <Button
                     color="secondary"
                     variant="contained"
-                    onClick={handleVote}
+                    onClick={loading ? () => {} : handleVote}
                   >
                     Votar
                   </Button>
@@ -209,13 +267,22 @@ const Product = () => {
 
             <Text>Empresa {company}</Text>
             <Text>Por {userProduct.name}</Text>
+            {user.uid === userProduct.id && (
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={handleDelete}
+              >
+                Eliminar producto
+              </Button>
+            )}
           </div>
           <div>
             <div className={classes.contentHeader}>
               <Text component="h1">Comentarios</Text>
             </div>
             {user && (
-              <form className={classes.form} onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit}>
                 <Input
                   variant="filled"
                   name="comment"
@@ -227,23 +294,43 @@ const Product = () => {
                   color="secondary"
                   multiline
                 />
-                <Button color="secondary" variant="contained" type="submit">
-                  Comentar
-                </Button>
+                {loading ? (
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    className={classes.button}
+                  >
+                    Cargando...
+                  </Button>
+                ) : (
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    className={classes.button}
+                    type="submit"
+                  >
+                    Comentar
+                  </Button>
+                )}
               </form>
             )}
 
             <Divider className={classes.divider} />
 
             {comments.length ? (
-              <>
+              <div className={classes.comments}>
                 {comments.map((c) => (
-                  <div key={shortid.generate()}>
-                    <Text component="h6">{c.cotent}</Text>
-                    <Text>Escrito por: {c.nameUser}</Text>
-                  </div>
+                  <Paper key={shortid.generate()} className={classes.comment}>
+                    <Text component="h6">{c?.content}</Text>
+                    <Text>Escrito por: {c?.user?.name} </Text>
+                    {c?.user?.id === userProduct?.id && (
+                      <Paper className={classes.comment}>
+                        <Text component="h6">Es el creador del producto</Text>
+                      </Paper>
+                    )}
+                  </Paper>
                 ))}
-              </>
+              </div>
             ) : (
               <Text>Aún no hay comentarios.</Text>
             )}

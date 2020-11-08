@@ -70,14 +70,18 @@ export async function createProduct(data) {
   }
 }
 
-export const getProductsFirebase = (cb) =>
-  db.collection("products").orderBy("created", "desc").onSnapshot(cb)
+export const getProductsFirebase = (cb, order = "created") =>
+  db.collection("products").orderBy(order, "desc").onSnapshot(cb)
 
 export const getProductFirebase = async (id) => {
   const product = await db.collection("products").doc(id).get()
   return product
 }
 
-export const addVote = async (id, data) => {
+export const updateProductFirebase = async (id, data) => {
   return await db.collection("products").doc(id).update(data)
+}
+
+export const deleteProductFirebase = async (id) => {
+  return await db.collection("products").doc(id).delete()
 }
