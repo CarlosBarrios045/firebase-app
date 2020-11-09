@@ -3,7 +3,7 @@ import Navbar from "src/components/Organisms/Navbar"
 import Sidebar from "src/components/Organisms/Sidebar"
 
 // Styles
-import { makeStyles } from "@material-ui/styles"
+import { makeStyles } from "@material-ui/core/styles"
 const styles = makeStyles(({ breakpoints }) => ({
   root: {
     minHeight: "100vh",
